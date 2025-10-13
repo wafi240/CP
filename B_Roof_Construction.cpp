@@ -1,0 +1,59 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+const long long mod = 1e9 + 7;
+#define YES puts("YES")
+#define NO puts("NO")
+#define in(x) cin >> x
+#define in2(x, y) cin >> x >> y;
+#define in3(x, y, z) cin >> x >> y >> z;
+#define ot(x) cout << x << " ";
+#define out(x) cout << x << endl;
+#define nl cout << endl;
+#define vi(n) vector<int> v(n);
+#define vi1(n) vector<int> v1(n);
+#define vl(n) vector<ll> v(n);
+#define vl1(n) vector<ll> v1(n);
+#define tt()  \
+    int t;    \
+    cin >> t; \
+    while (t--)
+#define rep1(a, n) for (int i = a; i < (n); ++i)
+#define rep2(i, a, b) for (int i = a; i <= b; ++i)
+#define rep3(a, m) for (int j = a; j < (m); ++j)
+int main()
+{
+    tt()
+    {
+        ll n;
+        cin >> n;
+        ll i = 1;
+        while (i < n)
+        {
+            i = i * 2;
+        }
+        i = i / 2;
+        ll xorsum = i;
+        deque<ll> v;
+
+        for (ll i = 1; i < xorsum; i++)
+        {
+            v.push_back(i);
+        }
+
+        v.push_front(0);
+        for (ll i = xorsum; i < n; i++)
+        {
+            v.push_front(i);
+        }
+        auto it = v.begin();
+        while (it != v.end())
+        {
+            cout << *it << " ";
+            it++;
+        }
+        nl;
+    }
+
+    return 0;
+}
