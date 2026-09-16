@@ -105,64 +105,53 @@ public:
         return query(leftchild, start, mid, l, r) + query(rightchild, mid + 1, end, l, r);
     }
 };
-void dfs(ll node, vector<bool> &vis, vector<vector<ll>> &adj, deque<ll> &q)
 
-{
-    vis[node] = 1;
-    for (auto child : adj[node])
-    {
-        if (!vis[child])
-        {
-            dfs(child, vis, adj, q);
-        }
-    }
-    q.push_back(node);
-}
 int main()
 {
     fast tt
     {
         ll n;
         cin >> n;
-        deque<ll> q;
-        vector<vector<ll>> adj(n + 1);
-        for (ll i = 0; i < n - 1; i++)
+        vector<ll> v(n);
+        ll mx = 0;
+        for (ll i = 0; i < n; i++)
         {
-            ll u, v, x, y;
-            cin >> u >> v >> x >> y;
-            if (x > y)
+            cin >> v[i];
+        }
+        for (ll i = 1; i < n; i++)
+        {
+            if (v[i] < v[i - 1])
             {
-                adj[v].pb(u);
-            }
-            else
-            {
-                adj[u].pb(v);
+                ll diff = v[i - 1] - v[i];
+                mx = max(mx, diff);
             }
         }
-        vector<bool> vis(n + 1, false);
-        for (ll i = 1; i <= n; i++)
+        // cout<<mx<<endl;
+        for (ll i = 1; i < n; i++)
         {
-            if (!vis[i])
+            if (v[i] < v[i - 1])
             {
-                dfs(i, vis, adj, q);
+
+                v[i] += mx;
             }
         }
-        vector<ll>ans(n+1,0);
-     ll j=n;   
-for(auto node:q)
-    {
-        ans[node]=j;
-        j--;
+        bool f=true;
+        // for (ll i = 0; i < n; i++)
+        // {
+        //     cout<<v[i]<<" ";
+        // }
+        // cout<<endl;
+        
+        for (ll i = 1; i < n; i++)
+        {
+              if (v[i] < v[i - 1])
+            {
 
-    }
-    for (ll i = 1; i <= n; i++)
-    {
-        cout<<ans[i]<<" ";
-    }
-    cout<<endl;
-    
-
-    
+                f=false;break;
+            } 
+        }
+        if(f)yes;
+        else no;
         
     }
     return 0;

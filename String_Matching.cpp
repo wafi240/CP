@@ -105,65 +105,64 @@ public:
         return query(leftchild, start, mid, l, r) + query(rightchild, mid + 1, end, l, r);
     }
 };
-void dfs(ll node, vector<bool> &vis, vector<vector<ll>> &adj, deque<ll> &q)
-
+struct RollingHash
 {
-    vis[node] = 1;
-    for (auto child : adj[node])
+    static const ll mod1 = 1000000007LL;
+    static const ll mod2 = 1000000009LL;
+    static const ll base = 32LL;
+    vector<ll> pref1, pref2;
+    vector<ll> power1, power2;
+    RollingHash(const string &s)
     {
-        if (!vis[child])
+        ll n = s.size();
+        pref1.assign(n + 1, 0);
+        pref2.assign(n + 1, 0);
+        power1.assign(n + 1, 1);
+        power2.assign(n + 1, 1);
+        for (ll i = 0; i < n; i++)
         {
-            dfs(child, vis, adj, q);
+            ll val = s[i] - 'a' + 1;
+            power1[i + 1] = (power1[i] * base) % mod1;
+            power2[i + 1] = (power2[i] * base) % mod2;
+            pref1[i + 1] = (pref1[i] * base + val) % mod1;
+            pref2[i + 1] = (pref2[i] * base + val) % mod2;
         }
     }
-    q.push_back(node);
-}
+    pair<ll, ll> get (ll l, ll r)
+    {
+        ll x1 = pref1[r + 1] - (pref1[l] * power1[r - l + 1]) % mod1;
+        ll x2 = pref2[r + 1] - (pref2[l] * power2[r - l + 1]) % mod2;
+        if (x1 < 0)
+            x1 += mod1;
+        if (x2 < 0)
+            x2 += mod2;
+        return {x1, x2};
+    }
+};
 int main()
 {
-    fast tt
-    {
-        ll n;
-        cin >> n;
-        deque<ll> q;
-        vector<vector<ll>> adj(n + 1);
-        for (ll i = 0; i < n - 1; i++)
-        {
-            ll u, v, x, y;
-            cin >> u >> v >> x >> y;
-            if (x > y)
-            {
-                adj[v].pb(u);
-            }
-            else
-            {
-                adj[u].pb(v);
-            }
-        }
-        vector<bool> vis(n + 1, false);
-        for (ll i = 1; i <= n; i++)
-        {
-            if (!vis[i])
-            {
-                dfs(i, vis, adj, q);
-            }
-        }
-        vector<ll>ans(n+1,0);
-     ll j=n;   
-for(auto node:q)
-    {
-        ans[node]=j;
-        j--;
+    fast
 
-    }
-    for (ll i = 1; i <= n; i++)
+        string s1,
+        s2;
+    cin >> s1 >> s2;
+    ll n = s1.size();
+    ll m = s2.size();
+    if (m > n)
     {
-        cout<<ans[i]<<" ";
+        cout << 0 << endl;
+        return 0;
     }
-    cout<<endl;
-    
-
-    
-        
+    RollingHash hs(s1), hp(s2);
+    auto it = hp.get(0, m - 1);
+    ll ans = 0;
+    for (ll i = 0; i + m <= n; i++)
+    {
+        if (hs.get(i, i + m - 1) == it)
+        {
+            ans++;
+        }
     }
+    cout << ans << endl;
     return 0;
 }

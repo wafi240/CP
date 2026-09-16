@@ -105,65 +105,71 @@ public:
         return query(leftchild, start, mid, l, r) + query(rightchild, mid + 1, end, l, r);
     }
 };
-void dfs(ll node, vector<bool> &vis, vector<vector<ll>> &adj, deque<ll> &q)
 
-{
-    vis[node] = 1;
-    for (auto child : adj[node])
-    {
-        if (!vis[child])
-        {
-            dfs(child, vis, adj, q);
-        }
-    }
-    q.push_back(node);
-}
 int main()
 {
-    fast tt
-    {
+    fast
         ll n;
-        cin >> n;
-        deque<ll> q;
-        vector<vector<ll>> adj(n + 1);
-        for (ll i = 0; i < n - 1; i++)
+    cin >> n;
+    vector<ll> L(n);
+    vector<ll> R(n);
+    for (ll i = 0; i < n; i++)
+    {
+        cin >> L[i];
+    }
+    for (ll i = 0; i < n; i++)
+    {
+        cin >> R[i];
+    }
+    if (n == 1)
+    {
+        if (L[0] >= 0 && 0 <= R[0])
         {
-            ll u, v, x, y;
-            cin >> u >> v >> x >> y;
-            if (x > y)
+            cout << 0 << endl;
+        }
+        else
+        {
+            cout << -1 << endl;
+        }
+    }
+    else if (n == 2)
+    {
+        ll l = max(L[0], L[1]);
+        ll r = min(R[0], R[1]);
+        if (r >= l)
+        {
+            cout << r << " " << r << endl;
+        }
+        else
+        {
+            cout << -1 << endl;
+        }
+    }
+    else
+    {
+
+        ll mx = *max_element(L.begin(), L.end());
+
+        vector<ll> ans(n);
+        for (ll i = 0; i < n; i++)
+        {
+
+            ans[i] = min(mx, R[i]);
+        }
+        ll sum = accumulate(ans.begin(), ans.end(), 0LL);
+
+        if (sum >= 2*mx)
+        {
+            for (ll i = 0; i < n; i++)
             {
-                adj[v].pb(u);
-            }
-            else
-            {
-                adj[u].pb(v);
+                cout << ans[i] << " ";
             }
         }
-        vector<bool> vis(n + 1, false);
-        for (ll i = 1; i <= n; i++)
+        else
         {
-            if (!vis[i])
-            {
-                dfs(i, vis, adj, q);
-            }
+            cout << -1 << endl;
         }
-        vector<ll>ans(n+1,0);
-     ll j=n;   
-for(auto node:q)
-    {
-        ans[node]=j;
-        j--;
+    }
 
-    }
-    for (ll i = 1; i <= n; i++)
-    {
-        cout<<ans[i]<<" ";
-    }
-    cout<<endl;
-    
-
-    
-        
-    }
     return 0;
 }

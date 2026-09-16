@@ -105,65 +105,44 @@ public:
         return query(leftchild, start, mid, l, r) + query(rightchild, mid + 1, end, l, r);
     }
 };
-void dfs(ll node, vector<bool> &vis, vector<vector<ll>> &adj, deque<ll> &q)
 
-{
-    vis[node] = 1;
-    for (auto child : adj[node])
-    {
-        if (!vis[child])
-        {
-            dfs(child, vis, adj, q);
-        }
-    }
-    q.push_back(node);
-}
 int main()
 {
     fast tt
     {
-        ll n;
-        cin >> n;
-        deque<ll> q;
-        vector<vector<ll>> adj(n + 1);
-        for (ll i = 0; i < n - 1; i++)
+        string s;
+        cin >> s;
+
+        set<ll> st;
+        ll n = s.size();
+        ll cnt = 1;
+        for (ll i = 0; i < n; i++)
         {
-            ll u, v, x, y;
-            cin >> u >> v >> x >> y;
-            if (x > y)
+            ll x = s[i] - 'a';
+
+            if (!st.empty() && st.count(x)>0)
             {
-                adj[v].pb(u);
+                continue;
             }
             else
             {
-                adj[u].pb(v);
+                if (st.size() < 3)
+                {
+                    st.insert(x);
+                }
+                else
+                {
+                    st.clear();
+                    st.insert(x);
+                    cnt++;
+                }
             }
         }
-        vector<bool> vis(n + 1, false);
-        for (ll i = 1; i <= n; i++)
-        {
-            if (!vis[i])
-            {
-                dfs(i, vis, adj, q);
-            }
-        }
-        vector<ll>ans(n+1,0);
-     ll j=n;   
-for(auto node:q)
-    {
-        ans[node]=j;
-        j--;
+        // ll x=mp.size();
+        // if(st.size()!=0)cnt++;
+        cout << cnt << endl;
 
-    }
-    for (ll i = 1; i <= n; i++)
-    {
-        cout<<ans[i]<<" ";
-    }
-    cout<<endl;
-    
-
-    
-        
+        // cout<<x<<endl;
     }
     return 0;
 }

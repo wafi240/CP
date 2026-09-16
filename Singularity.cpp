@@ -105,65 +105,97 @@ public:
         return query(leftchild, start, mid, l, r) + query(rightchild, mid + 1, end, l, r);
     }
 };
-void dfs(ll node, vector<bool> &vis, vector<vector<ll>> &adj, deque<ll> &q)
 
-{
-    vis[node] = 1;
-    for (auto child : adj[node])
-    {
-        if (!vis[child])
-        {
-            dfs(child, vis, adj, q);
-        }
-    }
-    q.push_back(node);
-}
 int main()
 {
     fast tt
     {
         ll n;
         cin >> n;
-        deque<ll> q;
-        vector<vector<ll>> adj(n + 1);
-        for (ll i = 0; i < n - 1; i++)
+        vector<ll> v(n);
+        for (ll i = 0; i < n; i++)
         {
-            ll u, v, x, y;
-            cin >> u >> v >> x >> y;
-            if (x > y)
+            cin >> v[i];
+        }
+
+        if (n == 1)
+        {
+            if (v[0] == 1)
             {
-                adj[v].pb(u);
+                cout << 0 << endl;
             }
             else
             {
-                adj[u].pb(v);
+                cout << 1 << endl;
             }
+            continue;
         }
-        vector<bool> vis(n + 1, false);
-        for (ll i = 1; i <= n; i++)
+
+        set<ll> st;
+        for (ll i = 0; i < n; i++)
         {
-            if (!vis[i])
+            st.insert(v[i]);
+        }
+        if (st.size() == 1)
+        {
+            auto it = st.begin();
+            if (*it == 1)
             {
-                dfs(i, vis, adj, q);
+                cout << 0 << endl;
+            }
+            else
+            {
+                cout << 1 << endl;
             }
         }
-        vector<ll>ans(n+1,0);
-     ll j=n;   
-for(auto node:q)
-    {
-        ans[node]=j;
-        j--;
+        else if (st.size() == 2)
+        {
 
-    }
-    for (ll i = 1; i <= n; i++)
-    {
-        cout<<ans[i]<<" ";
-    }
-    cout<<endl;
-    
+            ll c = 0;
+            auto it = st.begin();
+            ll fi = *it;
+            it++;
+            ll li = *it;
+            for (ll i = 1; i < n; i++)
+            {
+                if (v[i] != v[i - 1])
+                {
 
-    
-        
+                    c++;
+                }
+            }
+            if (c == 2)
+            {
+                if (fi == 1)
+                {
+                    if (v[0] == 1)
+                    {
+                        cout << 1 << endl;
+                    }
+                    else
+                        cout << 2 << endl;
+                }
+                else
+                {
+                    cout<<2<<endl;
+                }
+            }
+            else if (c > 2)
+            {
+                cout << 2 << endl;
+            }
+            else
+            {
+                if(fi==1)
+                cout << 1 << endl;
+                else
+                cout<<2<<endl;
+            }
+        }
+        else
+        {
+            cout << 2 << endl;
+        }
     }
     return 0;
 }

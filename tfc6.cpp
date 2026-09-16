@@ -105,65 +105,64 @@ public:
         return query(leftchild, start, mid, l, r) + query(rightchild, mid + 1, end, l, r);
     }
 };
-void dfs(ll node, vector<bool> &vis, vector<vector<ll>> &adj, deque<ll> &q)
 
-{
-    vis[node] = 1;
-    for (auto child : adj[node])
-    {
-        if (!vis[child])
-        {
-            dfs(child, vis, adj, q);
-        }
-    }
-    q.push_back(node);
-}
 int main()
 {
-    fast tt
-    {
+    fast
         ll n;
-        cin >> n;
-        deque<ll> q;
-        vector<vector<ll>> adj(n + 1);
-        for (ll i = 0; i < n - 1; i++)
-        {
-            ll u, v, x, y;
-            cin >> u >> v >> x >> y;
-            if (x > y)
-            {
-                adj[v].pb(u);
-            }
-            else
-            {
-                adj[u].pb(v);
-            }
-        }
-        vector<bool> vis(n + 1, false);
-        for (ll i = 1; i <= n; i++)
-        {
-            if (!vis[i])
-            {
-                dfs(i, vis, adj, q);
-            }
-        }
-        vector<ll>ans(n+1,0);
-     ll j=n;   
-for(auto node:q)
+    cin >> n;
+    vector<ll> v(n);
+    for (ll i = 0; i < n; i++)
     {
-        ans[node]=j;
-        j--;
-
+        cin >> v[i];
     }
-    for (ll i = 1; i <= n; i++)
+
+    vector<ll> pos;
+    vector<ll> neg;
+    for (ll i = 0; i < n; i++)
     {
-        cout<<ans[i]<<" ";
+        if (v[i] >= 0)
+        {
+            pos.pb(v[i]);
+        }
+        else
+        {
+            neg.pb(v[i]);
+        }
     }
-    cout<<endl;
-    
+    // sort(pos.begin(),pos.end());
 
-    
-        
+    sort(neg.begin(), neg.end());
+    ll sum = accumulate(pos.begin(), pos.end(), 0LL);
+    if (pos.size() >= neg.size())
+    {
+        cout << sum << endl;
     }
+    else
+    {
+        ll ans = sum;
+        ll i = 0;
+        ll j = neg.size() - 1;
+
+        ll mid = i + ((j - i + 1) / 2) - 1;
+        bool jor = true;
+        if ((j - i + 1) % 2 != 0)
+        {
+            mid = mid + 1;
+            jor = false;
+        }
+
+        // cout<<i<<" "<<j<<" "<<mid<<endl;
+        ll e1 = neg[mid];
+        ll e2 = 0;
+       
+             e2 = neg[mid+1];
+        cout << e1 << " " << e2 << endl;
+        cout << ans << endl;
+        ans += (e1 + e2) / 2;
+        cout << ans << endl;
+        cout << ans * 2 << endl;
+    }
+
     return 0;
 }

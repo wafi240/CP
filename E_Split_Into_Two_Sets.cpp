@@ -105,65 +105,78 @@ public:
         return query(leftchild, start, mid, l, r) + query(rightchild, mid + 1, end, l, r);
     }
 };
-void dfs(ll node, vector<bool> &vis, vector<vector<ll>> &adj, deque<ll> &q)
-
+bool dfs(vector<ll> &vc, map<ll, vector<ll>> &adj, ll color, ll node)
 {
-    vis[node] = 1;
-    for (auto child : adj[node])
+    // cout<<"node: "<<node<<endl;
+    vc[node] = color;
+    for (ll next : adj[node])
     {
-        if (!vis[child])
+        if (vc[next]==-1)
         {
-            dfs(child, vis, adj, q);
+            if (dfs(vc, adj, 1-color, next) == false)
+            {
+                return false;
+            }
+            // else  if(vc[node]==vc[next])
+            // {
+            //     return false;
+            // }
+        }
+        else
+        {
+            if(vc[node]==vc[next])
+            {
+                return false;
+            }
         }
     }
-    q.push_back(node);
+    return true;
 }
+
 int main()
 {
     fast tt
     {
         ll n;
         cin >> n;
-        deque<ll> q;
-        vector<vector<ll>> adj(n + 1);
-        for (ll i = 0; i < n - 1; i++)
+        bool hbe = true;
+        map<ll, vector<ll>> adj;
+        vector<ll>fq(n+1,0);
+        for (ll i = 0; i < n; i++)
         {
-            ll u, v, x, y;
-            cin >> u >> v >> x >> y;
-            if (x > y)
+            ll u, v;
+            cin >> u >> v;
+            fq[u]++;
+            fq[v]++;
+            adj[u].pb(v);
+            adj[v].pb(u);
+            if (adj[u].size() > 2 || adj[v].size()>2)
             {
-                adj[v].pb(u);
-            }
-            else
-            {
-                adj[u].pb(v);
+                hbe = false;
             }
         }
-        vector<bool> vis(n + 1, false);
+        if (!hbe)
+        {
+            no;
+            continue;
+        }
+        vector<ll> vc(n + 1, -1);
         for (ll i = 1; i <= n; i++)
         {
-            if (!vis[i])
+            if (vc[i] == -1)
             {
-                dfs(i, vis, adj, q);
+                if (!dfs(vc, adj, 0, i))
+                {
+                    hbe = false;
+                    break;
+                }
             }
         }
-        vector<ll>ans(n+1,0);
-     ll j=n;   
-for(auto node:q)
-    {
-        ans[node]=j;
-        j--;
 
-    }
-    for (ll i = 1; i <= n; i++)
-    {
-        cout<<ans[i]<<" ";
-    }
-    cout<<endl;
-    
-
-    
-        
+        if (hbe)
+            yes;
+        else
+            no;
     }
     return 0;
 }

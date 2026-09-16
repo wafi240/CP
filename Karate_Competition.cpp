@@ -1,42 +1,53 @@
 // wafi the laura — farming aura
 #include <bits/stdc++.h>
 using namespace std;
+
 #ifndef ONLINE_JUDGE
 #include "debug.hpp"
 #else
 #define debug(...)
 #define error(...)
 #endif
+
 #define ll long long
 #define fast                     \
     ios::sync_with_stdio(false); \
     cin.tie(nullptr);
+
 const ll mod = 1e9 + 7;
+
 #define yes cout << "YES\n"
 #define no cout << "NO\n"
 #define ot(x) cout << x << '\n'
+
 #define tt    \
     ll t;     \
     cin >> t; \
     while (t--)
+
 #define pb push_back
 #define sortv(v) sort(v.begin(), v.end())
 #define sortrv(v) sort(v.rbegin(), v.rend())
 #define rev(v) reverse(v.begin(), v.end())
 #define all(x) x.begin(), x.end()
+
 #define setbit(x, i) ((x) | (1LL << (i)))
 #define checkbit(x, i) ((x) & (1LL << (i)))
 #define togglebit(x, i) ((x) ^ (1LL << (i)))
+
 void in() {}
+
 template <typename T, typename... Args>
 void in(T &first, Args &...rest)
 {
     cin >> first;
     in(rest...);
 }
+
 ll adds(ll a, ll b) { return (a + b) % mod; }
 ll subs(ll a, ll b) { return (a - b + mod) % mod; }
 ll muls(ll a, ll b) { return (a * b) % mod; }
+
 ll binexp(ll a, ll b)
 {
     ll res = 1;
@@ -49,8 +60,10 @@ ll binexp(ll a, ll b)
     }
     return res;
 }
+
 ll inv(ll a) { return binexp(a, mod - 2); }
 ll divs(ll a, ll b) { return muls(a, inv(b)); }
+
 class ST
 {
 private:
@@ -63,6 +76,7 @@ public:
         size = n;
         tree.resize(4 * n, 0);
     }
+
     void build(ll node, ll start, ll end)
     {
         if (start == end)
@@ -70,100 +84,103 @@ public:
             tree[node] = 0;
             return;
         }
+
         ll mid = (start + end) / 2;
         ll leftchild = 2 * node;
         ll rightchild = 2 * node + 1;
+
         build(leftchild, start, mid);
         build(rightchild, mid + 1, end);
+
         tree[node] = tree[leftchild] + tree[rightchild];
     }
+
     void update(ll node, ll start, ll end, ll indx, ll value)
     {
         if (indx < start || indx > end)
             return;
+
         if (start == end)
         {
             tree[node] = value;
             return;
         }
+
         ll mid = (start + end) / 2;
         ll leftchild = 2 * node;
         ll rightchild = 2 * node + 1;
+
         update(leftchild, start, mid, indx, value);
         update(rightchild, mid + 1, end, indx, value);
+
         tree[node] = tree[leftchild] + tree[rightchild];
     }
+
     ll query(ll node, ll start, ll end, ll l, ll r)
     {
         if (l > end || r < start)
             return 0;
+
         if (start >= l && end <= r)
             return tree[node];
+
         ll mid = (start + end) / 2;
         ll leftchild = 2 * node;
         ll rightchild = 2 * node + 1;
-        return query(leftchild, start, mid, l, r) + query(rightchild, mid + 1, end, l, r);
+
+        return query(leftchild, start, mid, l, r) +
+               query(rightchild, mid + 1, end, l, r);
     }
 };
-void dfs(ll node, vector<bool> &vis, vector<vector<ll>> &adj, deque<ll> &q)
 
-{
-    vis[node] = 1;
-    for (auto child : adj[node])
-    {
-        if (!vis[child])
-        {
-            dfs(child, vis, adj, q);
-        }
-    }
-    q.push_back(node);
-}
 int main()
 {
-    fast tt
+    ll oop = 0;
+    tt
     {
+        oop++;
         ll n;
         cin >> n;
-        deque<ll> q;
-        vector<vector<ll>> adj(n + 1);
-        for (ll i = 0; i < n - 1; i++)
+        vector<ll> amar(n);
+        vector<ll> tomar(n);
+        for (ll i = 0; i < n; i++)
         {
-            ll u, v, x, y;
-            cin >> u >> v >> x >> y;
-            if (x > y)
+            cin >> amar[i];
+        }
+        for (ll i = 0; i < n; i++)
+        {
+            cin >> tomar[i];
+        }
+        sort(amar.begin(), amar.end());
+        sort(tomar.begin(), tomar.end());
+        ll l1 = 0, r1 = n - 1;
+        ll l2 = 0, r2 = n - 1;
+        ll count = 0;
+        while (l1 <= r1)
+        {
+            if (amar[r1] > tomar[r2])
             {
-                adj[v].pb(u);
+                count += 2;
+                r1--;
+                r2--;
+            }
+            else if (amar[l1] > tomar[l2])
+            {
+                count += 2;
+                l1++;
+                l2++;
             }
             else
             {
-                adj[u].pb(v);
+                if (amar[l1] == tomar[r2])
+                    count++;
+
+                l1++;
+                r2--;
             }
         }
-        vector<bool> vis(n + 1, false);
-        for (ll i = 1; i <= n; i++)
-        {
-            if (!vis[i])
-            {
-                dfs(i, vis, adj, q);
-            }
-        }
-        vector<ll>ans(n+1,0);
-     ll j=n;   
-for(auto node:q)
-    {
-        ans[node]=j;
-        j--;
+        cout << "Case " << oop << ": " << count << endl;
+    }
 
-    }
-    for (ll i = 1; i <= n; i++)
-    {
-        cout<<ans[i]<<" ";
-    }
-    cout<<endl;
-    
-
-    
-        
-    }
     return 0;
 }

@@ -105,65 +105,87 @@ public:
         return query(leftchild, start, mid, l, r) + query(rightchild, mid + 1, end, l, r);
     }
 };
-void dfs(ll node, vector<bool> &vis, vector<vector<ll>> &adj, deque<ll> &q)
 
+void dj(ll start, vector<vector<ll>> &adj, ll n, vector<ll> &dist)
 {
-    vis[node] = 1;
-    for (auto child : adj[node])
+    queue<ll> pq;
+
+    dist[start] = 0;
+    // cout << dist[start] << endl;
+    pq.push(start);
+    while (!pq.empty())
     {
-        if (!vis[child])
+        ll u = pq.front();
+        pq.pop();
+        // cout << u << " " << dist[u] << endl;
+        for (auto child : adj[u])
         {
-            dfs(child, vis, adj, q);
+            if (dist[u] + 1 < dist[child])
+            {
+                dist[child] = min(dist[child], dist[u] + 1);
+                pq.push(child);
+            }
         }
     }
-    q.push_back(node);
+    return;
 }
+
 int main()
 {
-    fast tt
+    tt
     {
-        ll n;
-        cin >> n;
-        deque<ll> q;
+        ll n, k;
+        cin >> n >> k;
+        ll a, b, c;
+        cin >> a >> b >> c;
+        vector<ll> dist(n + 1, LLONG_MAX);
+        vector<ll> dist2(n + 1, LLONG_MAX);
+
         vector<vector<ll>> adj(n + 1);
-        for (ll i = 0; i < n - 1; i++)
+        for (ll i = 0; i < k; i++)
         {
-            ll u, v, x, y;
-            cin >> u >> v >> x >> y;
-            if (x > y)
+            ll u, v;
+            cin >> u >> v;
+            adj[u].pb(v);
+            adj[v].pb(u);
+        }
+        dj(c, adj, n, dist);
+        dj(a, adj, n, dist2);
+
+        if (dist[a] == dist[b])
+        {
+            if (dist[a] == LLONG_MAX && dist2[b] != LLONG_MAX)
+
             {
-                adj[v].pb(u);
+                cout << "Alice" << endl;
+            }
+            else
+            cout << "Tie" << endl;
+        }
+        else if (dist[a] == LLONG_MAX)
+        {
+
+            if (dist[b] == 1)
+            {
+                cout << "Tie" << endl;
             }
             else
             {
-                adj[u].pb(v);
+                cout << "Alice" << endl;
             }
         }
-        vector<bool> vis(n + 1, false);
-        for (ll i = 1; i <= n; i++)
+        else if (dist[b] == LLONG_MAX)
         {
-            if (!vis[i])
-            {
-                dfs(i, vis, adj, q);
-            }
+            cout << "Alice" << endl;
         }
-        vector<ll>ans(n+1,0);
-     ll j=n;   
-for(auto node:q)
-    {
-        ans[node]=j;
-        j--;
-
-    }
-    for (ll i = 1; i <= n; i++)
-    {
-        cout<<ans[i]<<" ";
-    }
-    cout<<endl;
-    
-
-    
-        
+        else if (dist[a] < dist[b])
+        {
+            cout << "Alice" << endl;
+        }
+        else if (dist[b] < dist[a])
+        {
+            cout << "Bob" << endl;
+        }
     }
     return 0;
 }

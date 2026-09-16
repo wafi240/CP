@@ -56,7 +56,6 @@ class ST
 private:
     vector<ll> tree;
     ll size;
-
 public:
     ST(ll n)
     {
@@ -79,8 +78,7 @@ public:
     }
     void update(ll node, ll start, ll end, ll indx, ll value)
     {
-        if (indx < start || indx > end)
-            return;
+        if (indx < start || indx > end) return;
         if (start == end)
         {
             tree[node] = value;
@@ -95,75 +93,43 @@ public:
     }
     ll query(ll node, ll start, ll end, ll l, ll r)
     {
-        if (l > end || r < start)
-            return 0;
-        if (start >= l && end <= r)
-            return tree[node];
+        if (l > end || r < start) return 0;
+        if (start >= l && end <= r) return tree[node];
         ll mid = (start + end) / 2;
         ll leftchild = 2 * node;
         ll rightchild = 2 * node + 1;
         return query(leftchild, start, mid, l, r) + query(rightchild, mid + 1, end, l, r);
     }
 };
-void dfs(ll node, vector<bool> &vis, vector<vector<ll>> &adj, deque<ll> &q)
 
-{
-    vis[node] = 1;
-    for (auto child : adj[node])
-    {
-        if (!vis[child])
-        {
-            dfs(child, vis, adj, q);
-        }
-    }
-    q.push_back(node);
-}
 int main()
 {
-    fast tt
+    fast
+    tt
     {
-        ll n;
-        cin >> n;
-        deque<ll> q;
-        vector<vector<ll>> adj(n + 1);
-        for (ll i = 0; i < n - 1; i++)
-        {
-            ll u, v, x, y;
-            cin >> u >> v >> x >> y;
-            if (x > y)
-            {
-                adj[v].pb(u);
-            }
-            else
-            {
-                adj[u].pb(v);
-            }
-        }
-        vector<bool> vis(n + 1, false);
+        ll n;cin>>n;
+        vector<ll>v(n+1);
         for (ll i = 1; i <= n; i++)
         {
-            if (!vis[i])
+            cin>>v[i];
+        }
+        //prefix dp they said, very well said
+        map<ll,ll>mp;
+        mp[0]=1;
+
+        for (ll i = 1; i <= n; i++)
+        {
+            if(mp[i-v[i]]>=0 && mp[i-v[i]-1]>0)
             {
-                dfs(i, vis, adj, q);
+                mp[i]=1;//covering prev
+            }
+            if(mp[i-1]>0)
+            {
+                mp[i+v[i]]=1;//covering after
             }
         }
-        vector<ll>ans(n+1,0);
-     ll j=n;   
-for(auto node:q)
-    {
-        ans[node]=j;
-        j--;
-
-    }
-    for (ll i = 1; i <= n; i++)
-    {
-        cout<<ans[i]<<" ";
-    }
-    cout<<endl;
-    
-
-    
-        
+        if(mp[n]>0)yes;
+        else no;
     }
     return 0;
 }

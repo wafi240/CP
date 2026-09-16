@@ -105,65 +105,82 @@ public:
         return query(leftchild, start, mid, l, r) + query(rightchild, mid + 1, end, l, r);
     }
 };
-void dfs(ll node, vector<bool> &vis, vector<vector<ll>> &adj, deque<ll> &q)
 
-{
-    vis[node] = 1;
-    for (auto child : adj[node])
-    {
-        if (!vis[child])
-        {
-            dfs(child, vis, adj, q);
-        }
-    }
-    q.push_back(node);
-}
 int main()
 {
-    fast tt
-    {
+    fast
         ll n;
-        cin >> n;
-        deque<ll> q;
-        vector<vector<ll>> adj(n + 1);
-        for (ll i = 0; i < n - 1; i++)
+    cin >> n;
+    ll m;
+    cin >> m;
+
+    vector<vector<pair<ll, ll>>> adj(n + 1);
+    for (ll i = 0; i < m; i++)
+    {
+        ll u, v, w;
+        cin >> u >> v >> w;
+        adj[u].pb({v, w});
+        // adj[v].pb({u, w});
+    }
+    ll source, dest;
+    // cin >> source >> dest;
+    source = 1;
+    dest = n;
+    priority_queue<pair<ll, ll>, vector<pair<ll, ll>>, greater<pair<ll, ll>>> pq;
+    vector<ll> dist(n + 1, LLONG_MAX);
+    vector<ll> parent(n + 1, -1);
+    dist[source] = 0;
+    pq.push({0, source});
+    while (!pq.empty())
+    {
+
+        ll node = pq.top().second;
+        ll wt = pq.top().first;
+        pq.pop();
+           if (wt != dist[node]) continue;
+
+        for (auto child : adj[node])
         {
-            ll u, v, x, y;
-            cin >> u >> v >> x >> y;
-            if (x > y)
+            ll next_node = child.first;
+            ll next_wt = child.second;
+            if (next_wt + wt < dist[next_node])
             {
-                adj[v].pb(u);
-            }
-            else
-            {
-                adj[u].pb(v);
+                dist[next_node] = next_wt + wt;
+                parent[next_node] = node;
+                pq.push({dist[next_node], next_node});
             }
         }
-        vector<bool> vis(n + 1, false);
-        for (ll i = 1; i <= n; i++)
-        {
-            if (!vis[i])
-            {
-                dfs(i, vis, adj, q);
-            }
-        }
-        vector<ll>ans(n+1,0);
-     ll j=n;   
-for(auto node:q)
-    {
-        ans[node]=j;
-        j--;
+    }
+    // cout<<dist[dest]<<endl;
 
-    }
-    for (ll i = 1; i <= n; i++)
-    {
-        cout<<ans[i]<<" ";
-    }
-    cout<<endl;
-    
 
-    
-        
-    }
+
+for (ll i = 1; i <=n; i++)
+{
+    cout<<dist[i]<< ' ';
+}
+cout<<endl;
+
+
+
+    // if (dist[dest] == LLONG_MAX)
+    // {
+    //     cout << -1 << endl;
+    //     return 0;
+    // }
+    // ll curr = dest;
+    // vector<ll> path;
+    // while (curr != -1)
+    // {
+    //     path.pb(curr);
+    //     curr = parent[curr];
+    // }
+    // reverse(path.begin(), path.end());
+    // for (ll i = 0; i < path.size(); i++)
+    // {
+    //     cout << path[i] << " ";
+    // }
+    // cout << endl;
+
     return 0;
 }

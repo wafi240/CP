@@ -105,65 +105,66 @@ public:
         return query(leftchild, start, mid, l, r) + query(rightchild, mid + 1, end, l, r);
     }
 };
-void dfs(ll node, vector<bool> &vis, vector<vector<ll>> &adj, deque<ll> &q)
 
+ll func(vector<ll> &v)
 {
-    vis[node] = 1;
-    for (auto child : adj[node])
+    int n = v.size();
+
+    if (n % 2 == 1)
     {
-        if (!vis[child])
-        {
-            dfs(child, vis, adj, q);
-        }
+
+        return 2LL * v[n / 2];
     }
-    q.push_back(node);
+    else
+    {
+
+        return v[n / 2 - 1] + v[n / 2];
+    }
+}
+ll func(vector<ll> &v, ll j)
+{
+    ll n = j+1;
+    ll x = 0;
+    ll y = 0;
+    if (n % 2 == 0)
+    {
+        x = n / 2;
+        y = x + 1;
+    }
+    else
+    {
+        x = n / 2;
+        x++;
+        y = x;
+    }
+
+    ll ele = (v[x - 1] + v[y - 1]);
+    return ele;
 }
 int main()
 {
-    fast tt
-    {
+    fast
         ll n;
-        cin >> n;
-        deque<ll> q;
-        vector<vector<ll>> adj(n + 1);
-        for (ll i = 0; i < n - 1; i++)
-        {
-            ll u, v, x, y;
-            cin >> u >> v >> x >> y;
-            if (x > y)
-            {
-                adj[v].pb(u);
-            }
-            else
-            {
-                adj[u].pb(v);
-            }
-        }
-        vector<bool> vis(n + 1, false);
-        for (ll i = 1; i <= n; i++)
-        {
-            if (!vis[i])
-            {
-                dfs(i, vis, adj, q);
-            }
-        }
-        vector<ll>ans(n+1,0);
-     ll j=n;   
-for(auto node:q)
+    cin >> n;
+    vector<ll> v(n);
+    for (ll i = 0; i < n; i++)
     {
-        ans[node]=j;
-        j--;
-
+        cin >> v[i];
     }
-    for (ll i = 1; i <= n; i++)
+    sort(v.begin(), v.end());
+    vector<ll> sfx(n + 1, 0);
+    for (ll i = n - 1; i >= 0; i--)
     {
-        cout<<ans[i]<<" ";
+        sfx[i] = sfx[i + 1] + v[i];
     }
-    cout<<endl;
-    
+    ll ans = LLONG_MIN;
+    for (ll i = 0; i < n; i++)
+    {
+        ll x = func(v, i);
+        x += 2 * sfx[i + 1];
+        ans = max(x, ans);
+    }
+    cout << ans << endl;
 
-    
-        
-    }
     return 0;
 }

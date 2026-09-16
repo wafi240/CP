@@ -105,65 +105,59 @@ public:
         return query(leftchild, start, mid, l, r) + query(rightchild, mid + 1, end, l, r);
     }
 };
-void dfs(ll node, vector<bool> &vis, vector<vector<ll>> &adj, deque<ll> &q)
 
-{
-    vis[node] = 1;
-    for (auto child : adj[node])
-    {
-        if (!vis[child])
-        {
-            dfs(child, vis, adj, q);
-        }
-    }
-    q.push_back(node);
-}
 int main()
 {
-    fast tt
+    fast
+        string s;
+    cin >> s;
+    ll count = 0;
+    for (ll i = 0; i < s.size(); i++)
     {
-        ll n;
-        cin >> n;
-        deque<ll> q;
-        vector<vector<ll>> adj(n + 1);
-        for (ll i = 0; i < n - 1; i++)
+        if (s[i] == 't')
         {
-            ll u, v, x, y;
-            cin >> u >> v >> x >> y;
-            if (x > y)
-            {
-                adj[v].pb(u);
-            }
-            else
-            {
-                adj[u].pb(v);
-            }
+            count++;
         }
-        vector<bool> vis(n + 1, false);
-        for (ll i = 1; i <= n; i++)
-        {
-            if (!vis[i])
-            {
-                dfs(i, vis, adj, q);
-            }
-        }
-        vector<ll>ans(n+1,0);
-     ll j=n;   
-for(auto node:q)
+    }
+    ll fi = -1;
+    ll li = -1;
+    for (ll i = 0; i < s.size(); i++)
     {
-        ans[node]=j;
-        j--;
+        if (s[i] == 't')
+        {
+            fi = i;
+            break;
+        }
+    }
+    for (ll i = s.size() - 1; i >= 0; i--)
+    {
+        if (s[i] == 't')
+        {
+            li = i;
+            break;
+        }
+    }
+    ll diff = li - fi;
+    diff++;
+
+    // cout << count << " " << diff << endl;
+    long double x = (1.0 * (count - 2));
+    long double y = (1.0 * (diff - 2));
+
+    if (x == 0.0)
+    {
+        cout << "0.00000000000000000" << endl;
+        return 0;
+    }
+    else if (count< 2)
+    {
+        x = -1.0 * x;
+        cout << fixed << setprecision(17) << x << endl;
+    }
+    else
+    {
 
     }
-    for (ll i = 1; i <= n; i++)
-    {
-        cout<<ans[i]<<" ";
-    }
-    cout<<endl;
-    
 
-    
-        
-    }
     return 0;
 }

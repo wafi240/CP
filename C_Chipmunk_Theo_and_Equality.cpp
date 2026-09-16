@@ -105,65 +105,92 @@ public:
         return query(leftchild, start, mid, l, r) + query(rightchild, mid + 1, end, l, r);
     }
 };
-void dfs(ll node, vector<bool> &vis, vector<vector<ll>> &adj, deque<ll> &q)
-
+void func(ll x, map<ll, ll> &mp)
 {
-    vis[node] = 1;
-    for (auto child : adj[node])
+    if (x == 1)
     {
-        if (!vis[child])
+        mp[1]++;
+        mp[2]++;
+        return;
+    }
+    while (x != 1)
+    {
+        mp[x]++;
+        if (x % 2 == 0)
         {
-            dfs(child, vis, adj, q);
+            x = x / 2;
+        }
+        else
+        {
+            x++;
         }
     }
-    q.push_back(node);
+    mp[1]++;
+}
+void func2(ll x, ll &ans, ll dest)
+{
+    while (x != dest)
+    {
+        ans++;
+        if (x % 2 == 0)
+        {
+            x = x / 2;
+        }
+        else
+        {
+            x++;
+        }
+    }
 }
 int main()
 {
-    fast tt
+fast
+    tt
     {
         ll n;
         cin >> n;
-        deque<ll> q;
-        vector<vector<ll>> adj(n + 1);
-        for (ll i = 0; i < n - 1; i++)
+        vector<ll> v(n);
+        map<ll, ll> mp;
+        mp[0] = 0;
+        set<ll> st;
+        for (ll i = 0; i < n; i++)
         {
-            ll u, v, x, y;
-            cin >> u >> v >> x >> y;
-            if (x > y)
-            {
-                adj[v].pb(u);
-            }
-            else
-            {
-                adj[u].pb(v);
-            }
+            cin >> v[i];
+            st.insert(v[i]);
         }
-        vector<bool> vis(n + 1, false);
-        for (ll i = 1; i <= n; i++)
+        if (st.size() == 1)
         {
-            if (!vis[i])
-            {
-                dfs(i, vis, adj, q);
-            }
+            cout << 0 << endl;
+            continue;
         }
-        vector<ll>ans(n+1,0);
-     ll j=n;   
-for(auto node:q)
-    {
-        ans[node]=j;
-        j--;
+        for (ll i = 0; i < n; i++)
+        {
+            func(v[i], mp);
+        }
+        auto it = mp.end();
+        it--;
+        vector<ll> dest;
+        while (it != mp.begin())
+        {
+            // cout<<it->first<<" "<<it->second<<endl;
+            if (it->second == n)
+            {
+                dest.pb(it->first);
+            }
+            it--;
+        }
+        ll ans = LLONG_MAX;
+        for (ll i = 0; i < dest.size(); i++)
+        {
+            ll temp = 0;
+            for (ll j = 0; j < n; j++)
+            {
+                func2(v[j], temp, dest[i]);
+            }
+            ans = min(ans, temp);
+        }
 
+        // cout<<dest<<endl;
+        cout << ans << endl;
     }
-    for (ll i = 1; i <= n; i++)
-    {
-        cout<<ans[i]<<" ";
-    }
-    cout<<endl;
-    
-
-    
-        
-    }
-    return 0;
 }

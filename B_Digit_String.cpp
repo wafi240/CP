@@ -105,65 +105,66 @@ public:
         return query(leftchild, start, mid, l, r) + query(rightchild, mid + 1, end, l, r);
     }
 };
-void dfs(ll node, vector<bool> &vis, vector<vector<ll>> &adj, deque<ll> &q)
 
-{
-    vis[node] = 1;
-    for (auto child : adj[node])
-    {
-        if (!vis[child])
-        {
-            dfs(child, vis, adj, q);
-        }
-    }
-    q.push_back(node);
-}
 int main()
 {
-    fast tt
+    fast;
+
+    tt
     {
-        ll n;
-        cin >> n;
-        deque<ll> q;
-        vector<vector<ll>> adj(n + 1);
-        for (ll i = 0; i < n - 1; i++)
+        string s;
+        cin >> s;
+
+        ll n = s.size();
+        ll c4 = 0;
+
+        for (ll i = 0; i < n; i++)
         {
-            ll u, v, x, y;
-            cin >> u >> v >> x >> y;
-            if (x > y)
+            if (s[i] == '4')
             {
-                adj[v].pb(u);
-            }
-            else
-            {
-                adj[u].pb(v);
+                c4++;
             }
         }
-        vector<bool> vis(n + 1, false);
-        for (ll i = 1; i <= n; i++)
+
+        vector<ll> pf(n + 1, 0);
+        vector<ll> sf(n + 1, 0);
+
+        for (ll i = 0; i < n; i++)
         {
-            if (!vis[i])
+            pf[i + 1] = pf[i];
+            if (s[i] == '4')
             {
-                dfs(i, vis, adj, q);
+                continue;
+            }
+            if (s[i] != '2')
+            {
+                pf[i + 1] += 1;
             }
         }
-        vector<ll>ans(n+1,0);
-     ll j=n;   
-for(auto node:q)
-    {
-        ans[node]=j;
-        j--;
 
-    }
-    for (ll i = 1; i <= n; i++)
-    {
-        cout<<ans[i]<<" ";
-    }
-    cout<<endl;
-    
+        for (ll i = n - 1; i >= 0; i--)
+        {
+            sf[i] = sf[i + 1];
 
-    
-        
+            if (s[i] == '4')
+            {
+                continue;
+            }
+
+            if (s[i] == '2')
+            {
+                sf[i] += 1;
+            }
+        }
+        ll ans = LLONG_MAX;
+
+        for (ll i = 0; i <= n; i++)
+        {
+            ans = min(ans, pf[i] + sf[i]);
+        }
+
+        cout << ans + c4 << endl;
     }
+
     return 0;
 }

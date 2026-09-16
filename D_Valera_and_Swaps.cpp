@@ -105,65 +105,77 @@ public:
         return query(leftchild, start, mid, l, r) + query(rightchild, mid + 1, end, l, r);
     }
 };
-void dfs(ll node, vector<bool> &vis, vector<vector<ll>> &adj, deque<ll> &q)
 
-{
-    vis[node] = 1;
-    for (auto child : adj[node])
-    {
-        if (!vis[child])
-        {
-            dfs(child, vis, adj, q);
-        }
-    }
-    q.push_back(node);
-}
 int main()
 {
-    fast tt
-    {
-        ll n;
-        cin >> n;
-        deque<ll> q;
-        vector<vector<ll>> adj(n + 1);
-        for (ll i = 0; i < n - 1; i++)
-        {
-            ll u, v, x, y;
-            cin >> u >> v >> x >> y;
-            if (x > y)
-            {
-                adj[v].pb(u);
-            }
-            else
-            {
-                adj[u].pb(v);
-            }
-        }
-        vector<bool> vis(n + 1, false);
-        for (ll i = 1; i <= n; i++)
-        {
-            if (!vis[i])
-            {
-                dfs(i, vis, adj, q);
-            }
-        }
-        vector<ll>ans(n+1,0);
-     ll j=n;   
-for(auto node:q)
-    {
-        ans[node]=j;
-        j--;
 
-    }
-    for (ll i = 1; i <= n; i++)
+    ll n;
+    cin >> n;
+    vector<ll> v(n);
+    for (ll i = 0; i < n; i++)
     {
-        cout<<ans[i]<<" ";
+        cin >> v[i];
     }
-    cout<<endl;
-    
+    ll m;
+    cin >> m;
+    vector<pair<ll, ll>> a;
 
-    
+    for (ll i = 0; i < n; i++)
+    {
+        a.push_back({v[i], i});
+    }
+
+    sort(a.begin(), a.end());
+
+    vector<ll> pos(n);
+
+    for (ll i = 0; i < n; i++)
+    {
+        pos[a[i].second] = i;
+    }
+
+    vector<pair<ll, ll>> ops;
+
+    for (ll i = 0; i < n; i++)
+    {
+        while (pos[i] != i)
+        {
+            ll j = pos[i];
+
+            ops.push_back({i, j});
+
+            swap(pos[i], pos[j]);
+        }
+    }
+
+    if (m <= ops.size())
+    {
+        for (ll i = 0; i < ops.size(); i++)
+        {
+            cout << ops[i].first << " " << ops[i].second << " ";
+        }
+    }
+    else
+    {
+        ll x = m - ops.size();
+
+        for (ll i = 0; i < ops.size(); i++)
+        {
+            cout << ops[i].first << " " << ops[i].second << " ";
+        }
+        ll cnt=0;
+        for (ll i = 1; i <=n; i++)
+        {
+            for (ll j = i+1; j <=n; j++)
+            {
+                cout<<i<<" "<<j<<" ";
+                cnt++;
+                if(cnt==x)break;
+
+            }
+            
+        }
+        
         
     }
-    return 0;
 }

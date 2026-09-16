@@ -51,11 +51,12 @@ ll binexp(ll a, ll b)
 }
 ll inv(ll a) { return binexp(a, mod - 2); }
 ll divs(ll a, ll b) { return muls(a, inv(b)); }
+
 class ST
 {
 private:
-    vector<ll> tree;
     ll size;
+    vector<ll> tree;
 
 public:
     ST(ll n)
@@ -71,99 +72,48 @@ public:
             return;
         }
         ll mid = (start + end) / 2;
-        ll leftchild = 2 * node;
-        ll rightchild = 2 * node + 1;
+        ll leftchild = (2 * node);
+        ll rightchild = (2 * node) + 1;
         build(leftchild, start, mid);
         build(rightchild, mid + 1, end);
         tree[node] = tree[leftchild] + tree[rightchild];
     }
-    void update(ll node, ll start, ll end, ll indx, ll value)
+    void update(ll node, ll start, ll end, ll indx, ll val)
     {
         if (indx < start || indx > end)
+        {
             return;
+        }
         if (start == end)
         {
-            tree[node] = value;
+            tree[node] = val;
             return;
         }
         ll mid = (start + end) / 2;
-        ll leftchild = 2 * node;
-        ll rightchild = 2 * node + 1;
-        update(leftchild, start, mid, indx, value);
-        update(rightchild, mid + 1, end, indx, value);
+        ll leftchild = (2 * node);
+        ll rightchild = (2 * node) + 1;
+        update(leftchild, start, mid, indx, val);
+        update(rightchild, mid + 1, end, indx, val);
         tree[node] = tree[leftchild] + tree[rightchild];
     }
     ll query(ll node, ll start, ll end, ll l, ll r)
     {
-        if (l > end || r < start)
-            return 0;
-        if (start >= l && end <= r)
+
+        if (l >= start && r <= end)
             return tree[node];
+        else
+            return 0;
+
         ll mid = (start + end) / 2;
-        ll leftchild = 2 * node;
-        ll rightchild = 2 * node + 1;
+        ll leftchild = (2 * node);
+        ll rightchild = (2 * node) + 1;
         return query(leftchild, start, mid, l, r) + query(rightchild, mid + 1, end, l, r);
     }
 };
-void dfs(ll node, vector<bool> &vis, vector<vector<ll>> &adj, deque<ll> &q)
 
-{
-    vis[node] = 1;
-    for (auto child : adj[node])
-    {
-        if (!vis[child])
-        {
-            dfs(child, vis, adj, q);
-        }
-    }
-    q.push_back(node);
-}
 int main()
 {
-    fast tt
-    {
-        ll n;
-        cin >> n;
-        deque<ll> q;
-        vector<vector<ll>> adj(n + 1);
-        for (ll i = 0; i < n - 1; i++)
-        {
-            ll u, v, x, y;
-            cin >> u >> v >> x >> y;
-            if (x > y)
-            {
-                adj[v].pb(u);
-            }
-            else
-            {
-                adj[u].pb(v);
-            }
-        }
-        vector<bool> vis(n + 1, false);
-        for (ll i = 1; i <= n; i++)
-        {
-            if (!vis[i])
-            {
-                dfs(i, vis, adj, q);
-            }
-        }
-        vector<ll>ans(n+1,0);
-     ll j=n;   
-for(auto node:q)
-    {
-        ans[node]=j;
-        j--;
+    fast
 
-    }
-    for (ll i = 1; i <= n; i++)
-    {
-        cout<<ans[i]<<" ";
-    }
-    cout<<endl;
-    
-
-    
-        
-    }
-    return 0;
+        return 0;
 }

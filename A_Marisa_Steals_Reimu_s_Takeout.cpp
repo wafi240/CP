@@ -56,7 +56,6 @@ class ST
 private:
     vector<ll> tree;
     ll size;
-
 public:
     ST(ll n)
     {
@@ -79,8 +78,7 @@ public:
     }
     void update(ll node, ll start, ll end, ll indx, ll value)
     {
-        if (indx < start || indx > end)
-            return;
+        if (indx < start || indx > end) return;
         if (start == end)
         {
             tree[node] = value;
@@ -95,74 +93,50 @@ public:
     }
     ll query(ll node, ll start, ll end, ll l, ll r)
     {
-        if (l > end || r < start)
-            return 0;
-        if (start >= l && end <= r)
-            return tree[node];
+        if (l > end || r < start) return 0;
+        if (start >= l && end <= r) return tree[node];
         ll mid = (start + end) / 2;
         ll leftchild = 2 * node;
         ll rightchild = 2 * node + 1;
         return query(leftchild, start, mid, l, r) + query(rightchild, mid + 1, end, l, r);
     }
 };
-void dfs(ll node, vector<bool> &vis, vector<vector<ll>> &adj, deque<ll> &q)
 
-{
-    vis[node] = 1;
-    for (auto child : adj[node])
-    {
-        if (!vis[child])
-        {
-            dfs(child, vis, adj, q);
-        }
-    }
-    q.push_back(node);
-}
 int main()
 {
-    fast tt
-    {
-        ll n;
-        cin >> n;
-        deque<ll> q;
-        vector<vector<ll>> adj(n + 1);
-        for (ll i = 0; i < n - 1; i++)
+    fast
+    tt{
+        ll n;cin>>n;vector<ll>v(n);
+        for (ll i = 0; i < n; i++)
         {
-            ll u, v, x, y;
-            cin >> u >> v >> x >> y;
-            if (x > y)
+            cin>>v[i];
+        }
+        ll z=0;
+        ll t=0;
+        ll o=0;
+        for (ll i = 0; i < n; i++)
+        {
+            if(v[i]==0)
             {
-                adj[v].pb(u);
+                z++;
             }
-            else
+            else if(v[i]==1)
             {
-                adj[u].pb(v);
+                o++;
+            }
+            else{
+                t++;
             }
         }
-        vector<bool> vis(n + 1, false);
-        for (ll i = 1; i <= n; i++)
-        {
-            if (!vis[i])
-            {
-                dfs(i, vis, adj, q);
-            }
-        }
-        vector<ll>ans(n+1,0);
-     ll j=n;   
-for(auto node:q)
-    {
-        ans[node]=j;
-        j--;
-
-    }
-    for (ll i = 1; i <= n; i++)
-    {
-        cout<<ans[i]<<" ";
-    }
-    cout<<endl;
-    
-
-    
+        ll sum=z;
+        ll mn=min(o,t);
+        o-=mn;
+        t-=mn;
+sum+=mn;
+        // cout<<sum<<endl;
+        sum+=((t*2)/6);
+        sum+=((o)/3);
+        cout<<sum<<endl;
         
     }
     return 0;

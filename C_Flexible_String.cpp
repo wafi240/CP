@@ -105,65 +105,70 @@ public:
         return query(leftchild, start, mid, l, r) + query(rightchild, mid + 1, end, l, r);
     }
 };
-void dfs(ll node, vector<bool> &vis, vector<vector<ll>> &adj, deque<ll> &q)
 
-{
-    vis[node] = 1;
-    for (auto child : adj[node])
-    {
-        if (!vis[child])
-        {
-            dfs(child, vis, adj, q);
-        }
-    }
-    q.push_back(node);
-}
 int main()
 {
     fast tt
     {
-        ll n;
-        cin >> n;
-        deque<ll> q;
-        vector<vector<ll>> adj(n + 1);
-        for (ll i = 0; i < n - 1; i++)
+        ll n, k;
+        cin >> n >> k;
+        string s, t;
+        cin >> s >> t;
+        vector<ll> vis(26, 0);
+        vector<ll> dis;
+        ll cnt = 0;
+        for (ll i = 0; i < n; i++)
         {
-            ll u, v, x, y;
-            cin >> u >> v >> x >> y;
-            if (x > y)
+            if (s[i] != t[i])
             {
-                adj[v].pb(u);
-            }
-            else
-            {
-                adj[u].pb(v);
+                if (vis[s[i] - 'a'] == 0)
+                {
+                    dis.pb(s[i] - 'a');
+                    vis[s[i] - 'a']++;
+                    cnt++;
+                }
             }
         }
-        vector<bool> vis(n + 1, false);
-        for (ll i = 1; i <= n; i++)
+        if (cnt <= k)
         {
-            if (!vis[i])
-            {
-                dfs(i, vis, adj, q);
-            }
+            cout << (n * (n + 1)) / 2 << endl;
+            continue;
         }
-        vector<ll>ans(n+1,0);
-     ll j=n;   
-for(auto node:q)
-    {
-        ans[node]=j;
-        j--;
+        ll mx = 1 << dis.size();
+        ll ans = 0;
 
-    }
-    for (ll i = 1; i <= n; i++)
-    {
-        cout<<ans[i]<<" ";
-    }
-    cout<<endl;
-    
+        for (ll mask = 0; mask < mx; mask++)
+        {
+            ll c = __builtin_popcountll(mask);
+            if (c > k)
+                continue;
+            vector<ll> temp(26, 0);
 
-    
-        
+            for (ll j = 0; j < dis.size(); j++)
+            {
+                if (mask & (1 << j))
+                {
+                    temp[dis[j]] = 1;
+
+                }
+            }
+            ll len = 0, tot = 0;
+            for (ll i1 = 0; i1 < n; i1++)
+            {
+                if (temp[s[i1] - 'a'] == 1 || s[i1] == t[i1])
+                {
+                    len++;
+                }
+                else
+                {
+                    tot += (len * (len + 1)) / 2;
+                    len = 0;
+                }
+            }
+            tot += (len * (len + 1)) / 2;
+            ans = max(ans, tot);
+        }
+        cout << ans << endl;
     }
     return 0;
 }
